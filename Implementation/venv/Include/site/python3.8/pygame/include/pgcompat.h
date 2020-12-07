@@ -109,8 +109,8 @@ typedef uint8_t Uint8;
 #define SDL_WINDOW_TOOLTIP 0
 #endif
 
-#ifndef SDL_WINDOW_POPUP_MENU
-#define SDL_WINDOW_POPUP_MENU 0
+#ifndef SDL_WINDOW_hover_MENU
+#define SDL_WINDOW_hover_MENU 0
 #endif
 
 
@@ -154,8 +154,8 @@ typedef uint8_t Uint8;
 #define SDL_WINDOW_TOOLTIP 0
 #endif
 
-#ifndef SDL_WINDOW_POPUP_MENU
-#define SDL_WINDOW_POPUP_MENU 0
+#ifndef SDL_WINDOW_hover_MENU
+#define SDL_WINDOW_hover_MENU 0
 #endif
 
 #if SDL_VERSION_ATLEAST(2, 0, 4)

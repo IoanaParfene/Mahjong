@@ -1,13 +1,13 @@
 import pygame
-import Buttons
-import GameModel
+import TileArrangement
+import ControlManagement
 import time
 
 # Initialize the game
 pygame.init()
 gameVersion = 'standard'
 
-# Title
+# Title and App Icon
 pygame.display.set_caption("Mahjong")
 icon = pygame.image.load('Icons/mahjong.png')
 pygame.display.set_icon(icon)
@@ -15,6 +15,8 @@ pygame.display.set_icon(icon)
 # Create Window and Background
 screen = pygame.display.set_mode((1200,770))
 bg = pygame.image.load('Pictures/bk.png')
+table = pygame.image.load('Pictures/WoodTable.jpg')
+table = pygame.transform.scale(table, (1500,800))
 
 # Music and Sound
 bkmusic = pygame.mixer.Sound('Sound/bkmusic.wav')
@@ -22,50 +24,31 @@ bkmusic.play(-1)
 bkmusic.set_volume(0.1)
 volumeOn = True
 
-# buttons
-buttons = []
-
-def CreateButtons():
-    buttons.append(Buttons.Button('Undo', (140, 445), [65, 0], screen))
-    buttons.append(Buttons.Button('Info', (140, 640), [65, 0], screen))
-    buttons.append(Buttons.Button('Shuffle', (140, 510), [65, 0], screen))
-    buttons.append(Buttons.Button('NewGame', (140, 575), [65, 0], screen, gameVersion))
-    buttons.append(Buttons.Button('SoundOn', (1000, 40), [-75,-5], screen, volumeOn, bkmusic))
-
-def RenderButtons():
-    for index in range(0,len(buttons)):
-        screen.blit(buttons[index].image, buttons[index].iconRect)
-
-def HoverButtons():
-    for index in range(0,len(buttons)):
-        if buttons[index].iconRect.collidepoint(pygame.mouse.get_pos()):
-            screen.blit(buttons[index].popUpImage, buttons[index].popUpRect)
-            pygame.display.flip()
-
 def main():
-
+    ''' Initialize game elements and run main loop '''
     # Initialize Buttons and Pieces
-    CreateButtons()
-    GameModel.InitPieceArrangement(gameVersion)
-
-    # Running game loop
+    ControlManagement.create_buttons(screen, gameVersion, bkmusic, volumeOn)
+    TileArrangement.init_piece_arrangement(gameVersion)
+    # Run game loop by frame
     running = True
     while running:
-
-        # Render Screen
+        # Render screen, buttons, check if button hover occurs
+        screen.blit(table,(0,0))
         screen.blit(bg, (0,0))
-        GameModel.RenderPieces(screen)
-        RenderButtons()
-        HoverButtons()
-
-        # Check if mouse clicked
+        TileArrangement.render_pieces(screen)
+        ControlManagement.manage_buttons(screen)
+        # Check for events
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                for button in buttons:
+                # Action if a certain button was clicked
+                for button in ControlManagement.buttons:
                     button.on_click(event)
-
+                # Action if a certain game tile was clicked
+                for piece in TileArrangement.pieces:
+                    piece.on_click(event)
+        # Display the screen
         pygame.display.update()
 
 main()

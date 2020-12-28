@@ -1,7 +1,11 @@
 import pygame
+import random
+import TileArrangement
+# Remaining uses of certain buttons
+remaining_uses_undo = 3
+remaining_uses_shuffle = 1
 
 class Button:
-
     # Button width in pixels
     pixels = 60
     # Prefix of button standard images
@@ -12,7 +16,7 @@ class Button:
     hover_pref = 'PopUp'
 
     def __init__(self, button_type, icon_pos, hover_pos_add, screen, *varg):
-        ''' Initialize button attributes '''
+        """ Initialize button attributes """
         # Prefix of button standard images
         self.button_type = button_type
         # Permanent button image loading, transforming and rectangle
@@ -31,7 +35,7 @@ class Button:
         self.varg = list(varg)
 
     def on_click(self, event):
-        ''' On-click button action function'''
+        """ On-click button action function"""
         if event.button == 1:
             if self.icon_rect.collidepoint(event.pos):
                 function_name = str(self.button_type) + '_button_action'
@@ -39,8 +43,8 @@ class Button:
 
 
 def MusicOn_button_action(button):
-    '''Turn music volume on and off'''
-    if(button.varg[0]==False):
+    """Turn music volume on and off"""
+    if not button.varg[0]:
         # Turn music volume on if the custom extra argument is False
         button.image = pygame.image.load('Icons/' + str(button.icon_pref) + str(button.icon_outline) + 'MusicOn.png')
         button.image = pygame.transform.scale(button.image, (button.pixels, button.pixels))
@@ -54,3 +58,70 @@ def MusicOn_button_action(button):
         button.screen.blit(button.image, button.icon_rect)
         button.varg[0] = False
         button.varg[1].set_volume(0.0)
+
+
+def Undo_button_action(button):
+    """Undo the last move"""
+    global remaining_uses_undo
+    # Check if any moves were executed
+    if(TileArrangement.executed_moves):
+        # Check if the player has any undo uses left
+        if(remaining_uses_undo>0):
+            # Get both pieces' array positions
+            values = TileArrangement.executed_moves.pop(-1)
+            # Add the pieces back on the board
+            TileArrangement.tile_array[values[0][0]][values[0][1]][values[0][2]][0] = True
+            TileArrangement.tile_array[values[1][0]][values[1][1]][values[1][2]][0] = True
+            # Remove one usage of undo
+            remaining_uses_undo -= 1
+
+
+def Shuffle_button_action(button):
+    """Shuffle remaining pieces"""
+    global remaining_uses_shuffle
+    # Check if the player has any shuffle uses left
+    if(remaining_uses_shuffle>0):
+        # Array of all the pieces remaining as their types
+        remaining_piece_types = []
+        for piece in TileArrangement.pieces:
+            # Check of the piece still exists on the board
+            if TileArrangement.tile_array[piece.matrix_position[0]][piece.matrix_position[1]][piece.matrix_position[2]][0]:
+                remaining_piece_types.append(piece.tile_number)
+        # Shuffle the remaining Piece Types
+        random.shuffle(remaining_piece_types)
+        # Reassign the remaining Piece Types
+        for piece in TileArrangement.pieces:
+            if TileArrangement.tile_array[piece.matrix_position[0]][piece.matrix_position[1]][piece.matrix_position[2]][0]:
+                piece.tile_number = remaining_piece_types.pop()
+        # Remove one usage of shuffle
+        remaining_uses_shuffle -= 1
+
+
+def NewGame_button_action(button):
+    """Shuffle remaining pieces"""
+    # Add the available button uses back
+    global remaining_uses_undo
+    global remaining_uses_shuffle
+    remaining_uses_undo = 3
+    remaining_uses_shuffle = 1
+    #
+    TileArrangement.current_piece = None
+    for move in TileArrangement.executed_moves:
+        TileArrangement.executed_moves.pop()
+    # Array of all the pieces remaining as their types
+    remaining_piece_types = []
+    for piece in TileArrangement.pieces:
+        # Check of the piece still exists on the board
+        TileArrangement.tile_array[piece.matrix_position[0]][piece.matrix_position[1]][piece.matrix_position[2]][0] = True
+        piece.image = 'default'
+        remaining_piece_types.append(piece.tile_number)
+    # Shuffle the remaining Piece Types
+    random.shuffle(remaining_piece_types)
+    # Reassign the remaining Piece Types
+    for piece in TileArrangement.pieces:
+        if TileArrangement.tile_array[piece.matrix_position[0]][piece.matrix_position[1]][piece.matrix_position[2]][0]:
+            piece.tile_number = remaining_piece_types.pop()
+
+
+
+

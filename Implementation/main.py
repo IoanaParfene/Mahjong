@@ -5,7 +5,6 @@ import time
 
 # Initialize the game
 pygame.init()
-gameVersion = 'standard'
 
 # Title and App Icon
 pygame.display.set_caption("Mahjong")
@@ -19,16 +18,16 @@ table = pygame.image.load('Pictures/WoodTable.jpg')
 table = pygame.transform.scale(table, (1500,800))
 
 # Music and Sound
-bkmusic = pygame.mixer.Sound('Sound/bkmusic.wav')
-bkmusic.play(-1)
-bkmusic.set_volume(0.1)
+background_music = pygame.mixer.Sound('Sound/bkmusic.wav')
+background_music.play(-1)
+background_music.set_volume(0.1)
 volumeOn = True
 
 def main():
-    ''' Initialize game elements and run main loop '''
+    """ Initialize game elements and run main loop """
     # Initialize Buttons and Pieces
-    ControlManagement.create_buttons(screen, gameVersion, bkmusic, volumeOn)
-    TileArrangement.init_piece_arrangement(gameVersion)
+    ControlManagement.create_buttons(screen, background_music, volumeOn)
+    TileArrangement.init_piece_arrangement()
     # Run game loop by frame
     running = True
     while running:

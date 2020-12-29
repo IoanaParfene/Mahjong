@@ -110,6 +110,9 @@ class Piece:
                     print(self.matrix_position[0], "Available")
                     # If there is no piece selected, select that one
                     if current_piece is None:
+                        # undo hinted pieces
+                        for piece in pieces:
+                            piece.image = 'default'
                         current_piece = [self.matrix_position[0],
                                          self.matrix_position[1],
                                          self.matrix_position[2]]
@@ -139,6 +142,9 @@ class Piece:
                         else:
                             # If the pieces are different with different types
                             # De-select the last one and select the new one
+                            # undo hinted pieces
+                            for piece in pieces:
+                                piece.image = 'default'
                             pieces[
                                 tile_array[current_piece[0]][current_piece[1]][current_piece[2]][1]].image = 'default'
                             current_piece = [self.matrix_position[0],

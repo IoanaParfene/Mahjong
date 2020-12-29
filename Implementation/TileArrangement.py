@@ -2,6 +2,10 @@ import pygame
 import random
 import Pieces
 from Pieces import Piece
+import time
+
+# Starting time of every game
+start_time = time.time()
 
 # Height of a piece in pixels
 PIECE_PIXELS = Pieces.PIECE_PIXELS

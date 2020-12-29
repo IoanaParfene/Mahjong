@@ -1,6 +1,8 @@
 import pygame
 import random
 import TileArrangement
+import time
+
 # Remaining uses of certain buttons
 remaining_uses_undo = 3
 remaining_uses_shuffle = 1
@@ -26,9 +28,14 @@ class Button:
         self.image = pygame.transform.scale(self.image, (self.pixels, self.pixels))
         self.icon_rect = self.image.get_rect(topleft=self.icon_pos)
         # Hover button labels loading, transforming and rectangle
-        self.hover_position = ([list(self.icon_pos)[0] + hover_pos_add[0], list(self.icon_pos)[1] + hover_pos_add[1]])
         self.hover_image = pygame.image.load('Icons/' + str(self.hover_pref) + button_type + '.png')
-        self.hover_image = pygame.transform.scale(self.hover_image, (self.pixels, self.pixels))
+        if(self.button_type == "Info"):
+            self.hover_image = pygame.transform.scale(self.hover_image, (700, 700))
+            self.hover_position = (240, 30)
+        else:
+            self.hover_image = pygame.transform.scale(self.hover_image, (self.pixels, self.pixels))
+            self.hover_position = (
+            [list(self.icon_pos)[0] + hover_pos_add[0], list(self.icon_pos)[1] + hover_pos_add[1]])
         self.hover_rect = self.hover_image.get_rect(topleft=self.hover_position)
         # The pygame screen
         self.screen = screen
@@ -117,6 +124,8 @@ def newgame_button_action(button):
     remaining_uses_hint = 3
     remaining_uses_undo = 3
     remaining_uses_shuffle = 1
+    # Change time
+    TileArrangement.start_time = time.time()
     # Add all buttons uses left back
     button.varg[0].hover_image = pygame.image.load(
             'Icons/' + str(button.varg[0].hover_pref) + button.varg[0].button_type + '.png')
@@ -126,7 +135,7 @@ def newgame_button_action(button):
     button.varg[1].hover_image = pygame.transform.scale(button.varg[1].hover_image, (button.pixels, button.pixels))
     button.varg[2].hover_image = pygame.image.load(
         'Icons/' + str(button.varg[2].hover_pref) + button.varg[2].button_type + '.png')
-    button.varg[2].hover_image = pygame.transform.scale(button.varg[0].hover_image, (button.pixels, button.pixels))
+    button.varg[2].hover_image = pygame.transform.scale(button.varg[2].hover_image, (button.pixels, button.pixels))
     # Re-initialize variables
     TileArrangement.current_piece = None
     for move in TileArrangement.executed_moves:

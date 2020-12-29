@@ -12,7 +12,7 @@ def create_buttons(screen, background_music, volumeOn):
     buttons.append(Buttons.Button('Hint', (135, 405), [65, 0], screen))
     buttons.append(Buttons.Button('NewGame', (135, 600), [65, 0], screen, buttons[0], buttons[1], buttons[2]))
     buttons.append(Buttons.Button('Info', (135, 665), [65, 0], screen))
-    buttons.append(Buttons.Button('MusicOn', (1000, 40), [-75, -5], screen, volumeOn, background_music))
+    buttons.append(Buttons.Button('MusicOn', (970, 40), [-75, -5], screen, volumeOn, background_music))
 
 
 def render_buttons(screen):

@@ -23,6 +23,19 @@ background_music.play(-1)
 background_music.set_volume(0.1)
 volumeOn = True
 
+# Time
+pygame.font.init()
+myfont = pygame.font.SysFont('Comic Sans MS', 30)
+start_time = time.time()
+
+# Remove
+table1 = pygame.image.load('Icons/Win.png')
+table1 = pygame.transform.scale(table1, (500,300))
+screen.blit(table1, (335, 160))
+
+# Special message
+special_message = False
+
 def main():
     """ Initialize game elements and run main loop """
     # Initialize Buttons and Pieces
@@ -34,6 +47,7 @@ def main():
         # Render screen, buttons, check if button hover occurs
         screen.blit(table,(0,0))
         screen.blit(bg, (0,0))
+
         TileArrangement.render_pieces(screen)
         ControlManagement.manage_buttons(screen)
         # Check for events
@@ -47,6 +61,12 @@ def main():
                 # Action if a certain game tile was clicked
                 for piece in TileArrangement.pieces:
                     piece.on_click(event)
+        # Display the time
+        game_time = myfont.render('Time: ' + str(int((time.time()-TileArrangement.start_time))), False, (0, 0, 0))
+        screen.blit(game_time,(940,100))
+        # Display the score
+        game_score = myfont.render('Score: ' + str(len(TileArrangement.executed_moves)), False, (0, 0, 0))
+        screen.blit(game_score,(940,135))
         # Display the screen
         pygame.display.update()
 

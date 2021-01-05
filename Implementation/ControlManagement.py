@@ -28,7 +28,11 @@ def hover_buttons(screen):
             screen.blit(buttons[index].hover_image, buttons[index].hover_rect)
 
 
-def manage_buttons(screen):
-    """ Render buttons and check if hovered over """
-    render_buttons(screen)
-    hover_buttons(screen)
+def try_shuffling(button):
+    """ Shuffle tiles if possible when game is lost"""
+    return Buttons.shuffle_button_action(button)
+
+
+def restart_game(button):
+    """ Shuffle tiles if possible when game is lost"""
+    return Buttons.newgame_button_action(button)

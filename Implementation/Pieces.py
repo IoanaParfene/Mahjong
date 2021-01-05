@@ -84,8 +84,7 @@ class Piece:
                     if (self.special_neighbour[0][0] == self.matrix_position[0] and
                             self.special_neighbour[0][1] == self.matrix_position[1] and
                             self.special_neighbour[0][2] == self.matrix_position[2] + column):
-                        if tile_array[self.special_neighbour[1][0]][self.special_neighbour[1][1]][
-                            self.special_neighbour[1][2]][0]:
+                        if tile_array[self.special_neighbour[1][0]][self.special_neighbour[1][1]][self.special_neighbour[1][2]][0]:
                             total_side_neighbours += 1
                 if tile_array[self.matrix_position[0]][self.matrix_position[1]][self.matrix_position[2] + column][0]:
                     total_side_neighbours += 1
@@ -119,9 +118,7 @@ class Piece:
                         self.image = 'clicked'
                     else:
                         # If the current piece type is the same as the already selected piece
-                        if (self.tile_number == pieces[tile_array[current_piece[0]]
-                        [current_piece[1]]
-                        [current_piece[2]][1]].tile_number):
+                        if self.tile_number == pieces[tile_array[current_piece[0]][current_piece[1]][current_piece[2]][1]].tile_number:
                             # If the selected piece is itself, de-select
                             if (self.matrix_position[0] == current_piece[0]
                                     and self.matrix_position[1] == current_piece[1]
@@ -134,7 +131,8 @@ class Piece:
                                 tile_array[current_piece[0]][current_piece[1]][current_piece[2]][0] = False
                                 tile_array[self.matrix_position[0]][self.matrix_position[1]][self.matrix_position[2]][
                                     0] = False
-                                pieces[tile_array[current_piece[0]][current_piece[1]][current_piece[2]][1]].image = 'default'
+                                pieces[tile_array[current_piece[0]][current_piece[1]][current_piece[2]][
+                                    1]].image = 'default'
                                 executed_moves.append([[current_piece[0], current_piece[1], current_piece[2]],
                                                        [self.matrix_position[0], self.matrix_position[1],
                                                         self.matrix_position[2]]])

@@ -26,6 +26,7 @@ current_piece = Pieces.current_piece
 # Executed move list
 executed_moves = Pieces.executed_moves
 
+
 def load_piece_images():
     """ Load normal piece images and clicked piece images in separate arrays """
 
@@ -167,3 +168,27 @@ def init_piece_arrangement():
     load_piece_images()
     create_tile_array()
     standard_arrangement()
+
+
+def check_win():
+    """ Check if th game was won, lost or it can be continued"""
+    # Get the remaining pieces
+    remaining_piece_types = dict()
+    lost = True
+    # Get the remaining pieces on the board and their types
+    for piece in pieces:
+        if piece.available():
+            if piece.tile_number not in remaining_piece_types.keys():
+                remaining_piece_types[piece.tile_number] = 1
+            else:
+                remaining_piece_types[piece.tile_number] += 1
+            # Lost if there are no available pairs on the board
+            if remaining_piece_types[piece.tile_number] == 2:
+                lost = False
+    # If there are no pieces left on the board, the game is won
+    if not remaining_piece_types:
+        return "Won"
+    elif lost is True:
+        return "Lost"
+    else:
+        return "Continue"

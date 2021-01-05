@@ -5,8 +5,9 @@ import time
 
 # Remaining uses of certain buttons
 remaining_uses_undo = 3
-remaining_uses_shuffle = 1
+remaining_uses_shuffle = 2
 remaining_uses_hint = 3
+
 
 class Button:
     # Button width in pixels
@@ -29,13 +30,13 @@ class Button:
         self.icon_rect = self.image.get_rect(topleft=self.icon_pos)
         # Hover button labels loading, transforming and rectangle
         self.hover_image = pygame.image.load('Icons/' + str(self.hover_pref) + button_type + '.png')
-        if(self.button_type == "Info"):
+        if self.button_type == "Info":
             self.hover_image = pygame.transform.scale(self.hover_image, (700, 700))
             self.hover_position = (240, 30)
         else:
             self.hover_image = pygame.transform.scale(self.hover_image, (self.pixels, self.pixels))
             self.hover_position = (
-            [list(self.icon_pos)[0] + hover_pos_add[0], list(self.icon_pos)[1] + hover_pos_add[1]])
+                [list(self.icon_pos)[0] + hover_pos_add[0], list(self.icon_pos)[1] + hover_pos_add[1]])
         self.hover_rect = self.hover_image.get_rect(topleft=self.hover_position)
         # The pygame screen
         self.screen = screen
@@ -72,9 +73,9 @@ def undo_button_action(button):
     """Undo the last move"""
     global remaining_uses_undo
     # Check if any moves were executed
-    if(TileArrangement.executed_moves):
+    if TileArrangement.executed_moves:
         # Check if the player has any undo uses left
-        if(remaining_uses_undo>0):
+        if remaining_uses_undo > 0:
             # Get both pieces' array positions
             values = TileArrangement.executed_moves.pop(-1)
             # Add the pieces back on the board
@@ -92,8 +93,9 @@ def undo_button_action(button):
 def shuffle_button_action(button):
     """Shuffle remaining pieces"""
     global remaining_uses_shuffle
+    original_uses_shuffle = remaining_uses_shuffle
     # Check if the player has any shuffle uses left
-    if(remaining_uses_shuffle>0):
+    if remaining_uses_shuffle > 0:
         # Array of all the pieces remaining as their types
         remaining_piece_types = []
         for piece in TileArrangement.pieces:
@@ -113,22 +115,26 @@ def shuffle_button_action(button):
             'Icons/' + str(button.hover_pref) + button.button_type + str(
                 remaining_uses_shuffle) + '.png')
         button.hover_image = pygame.transform.scale(button.hover_image, (button.pixels, button.pixels))
+    return original_uses_shuffle
 
 
 def newgame_button_action(button):
     """Start a new game"""
+
     # Add the available button uses back
     global remaining_uses_undo
     global remaining_uses_hint
     global remaining_uses_shuffle
     remaining_uses_hint = 3
     remaining_uses_undo = 3
-    remaining_uses_shuffle = 1
+    remaining_uses_shuffle = 2
+
     # Change time
     TileArrangement.start_time = time.time()
+
     # Add all buttons uses left back
     button.varg[0].hover_image = pygame.image.load(
-            'Icons/' + str(button.varg[0].hover_pref) + button.varg[0].button_type + '.png')
+        'Icons/' + str(button.varg[0].hover_pref) + button.varg[0].button_type + '.png')
     button.varg[0].hover_image = pygame.transform.scale(button.varg[0].hover_image, (button.pixels, button.pixels))
     button.varg[1].hover_image = pygame.image.load(
         'Icons/' + str(button.varg[1].hover_pref) + button.varg[1].button_type + '.png')
@@ -136,19 +142,25 @@ def newgame_button_action(button):
     button.varg[2].hover_image = pygame.image.load(
         'Icons/' + str(button.varg[2].hover_pref) + button.varg[2].button_type + '.png')
     button.varg[2].hover_image = pygame.transform.scale(button.varg[2].hover_image, (button.pixels, button.pixels))
+
     # Re-initialize variables
     TileArrangement.current_piece = None
-    for move in TileArrangement.executed_moves:
+    total_moves = len(TileArrangement.executed_moves)
+    for index in range(0, total_moves):
         TileArrangement.executed_moves.pop()
+
     # Array of all the pieces remaining as their types
     remaining_piece_types = []
     for piece in TileArrangement.pieces:
-        # Check of the piece still exists on the board
-        TileArrangement.tile_array[piece.matrix_position[0]][piece.matrix_position[1]][piece.matrix_position[2]][0] = True
+        # Check if the piece still exists on the board
+        TileArrangement.tile_array[piece.matrix_position[0]][piece.matrix_position[1]][piece.matrix_position[2]][
+            0] = True
         piece.image = 'default'
         remaining_piece_types.append(piece.tile_number)
+
     # Shuffle the remaining Piece Types
     random.shuffle(remaining_piece_types)
+
     # Reassign the remaining Piece Types
     for piece in TileArrangement.pieces:
         if TileArrangement.tile_array[piece.matrix_position[0]][piece.matrix_position[1]][piece.matrix_position[2]][0]:
@@ -173,7 +185,7 @@ def hint_button_action(button):
                     remaining_pieces = 2
                     for piece2 in TileArrangement.pieces:
                         if piece2.available():
-                            if(remaining_pieces>0):
+                            if remaining_pieces > 0:
                                 if piece2.tile_number == piece.tile_number:
                                     piece2.image = "clicked"
                                     remaining_pieces -= 1
@@ -187,11 +199,3 @@ def hint_button_action(button):
                             remaining_uses_hint) + '.png')
                     button.hover_image = pygame.transform.scale(button.hover_image, (button.pixels, button.pixels))
                     break
-
-
-
-
-
-
-
-
